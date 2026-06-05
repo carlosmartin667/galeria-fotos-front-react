@@ -1,0 +1,66 @@
+:root {
+  color-scheme: light;
+  --gf-sidebar-width: 264px;
+}
+
+body {
+  min-height: 100vh;
+  background: #f6f7f9;
+  color: #1f2937;
+}
+
+a {
+  text-decoration: none;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.gf-public-hero {
+  min-height: 48vh;
+  display: grid;
+  align-items: center;
+  background:
+    linear-gradient(90deg, rgba(18, 24, 38, 0.72), rgba(18, 24, 38, 0.22)),
+    url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80');
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.gf-admin-sidebar {
+  width: var(--gf-sidebar-width);
+  background: #182433;
+  color: #dce3eb;
+}
+
+.gf-admin-sidebar .nav-link {
+  color: #b7c3d0;
+  border-radius: 6px;
+}
+
+.gf-admin-sidebar .nav-link:hover,
+.gf-admin-sidebar .nav-link.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.gf-admin-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.metadata-box {
+  max-height: 280px;
+  overflow: auto;
+  font-size: 0.85rem;
+}
+
+@media (min-width: 992px) {
+  .gf-admin-desktop-sidebar {
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
+  }
+}
