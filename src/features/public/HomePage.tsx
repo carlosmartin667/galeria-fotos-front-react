@@ -1,27 +1,75 @@
+import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
+import { routes } from '@/config/routes';
+import { queryKeys } from '@/services/api/queryKeys';
+import { getSitioHome } from '@/services/sitio/sitioApi';
+import { EmptyState } from '@/shared/components/EmptyState';
+import { ErrorState } from '@/shared/components/ErrorState';
+import { LoadingState } from '@/shared/components/LoadingState';
+import { Seo } from '@/shared/components/Seo';
+import { PublicCard } from './components/PublicCards';
+
 export function HomePage() {
+  const home = useQuery({ queryKey: queryKeys.sitio.home(), queryFn: getSitioHome });
+
+  if (home.isLoading) return <LoadingState />;
+  if (home.isError) return <main className="container py-5"><ErrorState /></main>;
+
+  const data = home.data ?? {};
+
   return (
     <>
+      <Seo title="Home" description="Fotografia profesional para eventos, sesiones privadas y galerias digitales." />
       <section className="gf-public-hero">
         <div className="container">
           <div className="col-12 col-lg-7">
-            <h1 className="display-5 fw-semibold">GaleriaFotos</h1>
-            <p className="lead">
-              Frontend React paralelo para validar la nueva experiencia sobre el backend .NET existente.
-            </p>
+            <h1 className="display-5 fw-semibold">{data.titulo || 'GaleriaFotos'}</h1>
+            <p className="lead">{data.subtitulo || data.descripcion || 'Fotografia de eventos con entrega digital segura.'}</p>
+            <div className="d-flex gap-2 flex-wrap">
+              <Link className="btn btn-light" to={routes.public.presupuesto}>Solicitar presupuesto</Link>
+              <Link className="btn btn-outline-light" to={routes.public.portfolio}>Ver portfolio</Link>
+            </div>
           </div>
         </div>
       </section>
-      <section className="container py-5" id="servicios">
-        <h2 className="h4">Servicios</h2>
-        <p className="text-secondary">Base publica inicial para fotografia de eventos, portfolio y contacto.</p>
+
+      <section className="container py-5">
+        <h2 className="h4 mb-3">Servicios destacados</h2>
+        <div className="row g-3">
+          {(data.serviciosDestacados ?? []).slice(0, 3).map((servicio) => (
+            <div className="col-12 col-md-4" key={servicio.id}>
+              <PublicCard title={servicio.nombre} description={servicio.descripcion} imageUrl={servicio.imagenUrl} to={routes.public.servicioDetail(servicio.id)} />
+            </div>
+          ))}
+        </div>
+        {(data.serviciosDestacados ?? []).length === 0 ? <EmptyState /> : null}
       </section>
-      <section className="container py-5 border-top" id="portfolio">
-        <h2 className="h4">Portfolio</h2>
-        <p className="text-secondary">El consumo de contenido publico queda preparado para futuras iteraciones.</p>
+
+      <section className="container py-5 border-top">
+        <h2 className="h4 mb-3">Portfolio</h2>
+        <div className="row g-3">
+          {(data.portfolioDestacado ?? []).slice(0, 3).map((item) => (
+            <div className="col-12 col-md-4" key={item.id}>
+              <PublicCard title={item.titulo} description={item.descripcion} imageUrl={item.imagenUrl} to={routes.public.portfolioDetail(item.id)} meta={item.categoria} />
+            </div>
+          ))}
+        </div>
       </section>
-      <section className="container py-5 border-top" id="contacto">
-        <h2 className="h4">Contacto</h2>
-        <p className="text-secondary">Los formularios publicos se integraran manteniendo los endpoints actuales.</p>
+
+      <section className="container py-5 border-top">
+        <h2 className="h4 mb-3">Testimonios</h2>
+        <div className="row g-3">
+          {(data.testimoniosDestacados ?? []).slice(0, 3).map((testimonio) => (
+            <div className="col-12 col-md-4" key={testimonio.id}>
+              <blockquote className="card border-0 shadow-sm h-100 mb-0">
+                <div className="card-body">
+                  <p>{testimonio.texto}</p>
+                  <footer className="small text-secondary">{testimonio.nombreCliente}</footer>
+                </div>
+              </blockquote>
+            </div>
+          ))}
+        </div>
       </section>
     </>
   );

@@ -1,0 +1,1 @@
+export interface Foto { id: string; eventoId?: string; nombreArchivo?: string; titulo?: string; previewUrl?: string; precioUnitario?: number; destacada?: boolean; storageKey?: string; marcaAguaStorageKey?: string; signedUrl?: string; }

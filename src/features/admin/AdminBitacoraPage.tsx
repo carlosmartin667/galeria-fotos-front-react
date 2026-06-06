@@ -1,6 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { getBitacora, getBitacoraResumen, type BitacoraFilters } from './adminService';
+import { queryKeys } from '@/services/api/queryKeys';
+import { getBitacora, getBitacoraResumen, type BitacoraFilters } from '@/services/bitacora/bitacoraApi';
+import { EmptyState } from '@/shared/components/EmptyState';
+import { SanitizedMetadata } from '@/shared/components/admin/AdminPrimitives';
 
 function asItems(data: unknown): Record<string, unknown>[] {
   if (Array.isArray(data)) {
@@ -17,8 +20,8 @@ function asItems(data: unknown): Record<string, unknown>[] {
 export function AdminBitacoraPage() {
   const [filters, setFilters] = useState<BitacoraFilters>({});
   const [draft, setDraft] = useState<BitacoraFilters>({});
-  const bitacora = useQuery({ queryKey: ['bitacora', filters], queryFn: () => getBitacora(filters) });
-  const resumen = useQuery({ queryKey: ['bitacora-resumen'], queryFn: getBitacoraResumen });
+  const bitacora = useQuery({ queryKey: queryKeys.bitacora.list(filters), queryFn: () => getBitacora(filters) });
+  const resumen = useQuery({ queryKey: queryKeys.bitacora.resumen(), queryFn: getBitacoraResumen });
   const rows = asItems(bitacora.data);
 
   return (
@@ -84,13 +87,14 @@ export function AdminBitacoraPage() {
           <div className="card border-0 shadow-sm">
             <div className="table-responsive">
               <table className="table table-sm align-middle mb-0">
+                <caption className="visually-hidden">Registros de bitacora administrativa</caption>
                 <thead>
                   <tr>
-                    <th>Fecha</th>
-                    <th>Usuario</th>
-                    <th>Accion</th>
-                    <th>Severidad</th>
-                    <th>Metadata</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Accion</th>
+                    <th scope="col">Severidad</th>
+                    <th scope="col">Metadata</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -101,14 +105,14 @@ export function AdminBitacoraPage() {
                       <td>{String(row.accion ?? '-')}</td>
                       <td>{String(row.severidad ?? '-')}</td>
                       <td>
-                        <code>{JSON.stringify(row.metadata ?? row.detalle ?? {})}</code>
+                        <SanitizedMetadata value={row.metadata ?? row.detalle ?? {}} />
                       </td>
                     </tr>
                   ))}
                   {!bitacora.isLoading && rows.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="text-secondary text-center py-4">
-                        Sin registros para mostrar.
+                      <td colSpan={5}>
+                        <EmptyState title="Sin registros" message="No hay entradas de bitacora para mostrar." />
                       </td>
                     </tr>
                   ) : null}
@@ -122,7 +126,7 @@ export function AdminBitacoraPage() {
             <div className="card-body">
               <h2 className="h6">Resumen</h2>
               <pre className="metadata-box bg-light p-3 rounded mb-0">
-                {JSON.stringify(resumen.data ?? {}, null, 2)}
+                <SanitizedMetadata value={resumen.data ?? {}} />
               </pre>
             </div>
           </div>

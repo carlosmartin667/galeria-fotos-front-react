@@ -1,15 +1,18 @@
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '@/app/providers/AuthProvider';
+import { routes } from '@/config/routes';
+import { useBootstrapBundle } from '@/shared/hooks/useBootstrapBundle';
 
 export function PublicLayout() {
+  useBootstrapBundle();
   const { isAuthenticated, isAdmin } = useAuth();
-  const panelPath = isAdmin ? '/admin/dashboard' : '/dashboard';
+  const panelPath = isAdmin ? routes.admin.dashboard : routes.user.dashboard;
 
   return (
     <div className="app-shell bg-white">
       <nav className="navbar navbar-expand-lg bg-white border-bottom">
         <div className="container">
-          <Link className="navbar-brand fw-semibold" to="/">
+          <Link className="navbar-brand fw-semibold" to={routes.public.root}>
             GaleriaFotos
           </Link>
           <button
@@ -25,20 +28,26 @@ export function PublicLayout() {
           </button>
           <div className="collapse navbar-collapse" id="publicNav">
             <div className="navbar-nav me-auto">
-              <NavLink className="nav-link" to="/home">
+              <NavLink className="nav-link" to={routes.public.home}>
                 Home
               </NavLink>
-              <a className="nav-link" href="/home#servicios">
+              <NavLink className="nav-link" to={routes.public.servicios}>
                 Servicios
-              </a>
-              <a className="nav-link" href="/home#portfolio">
+              </NavLink>
+              <NavLink className="nav-link" to={routes.public.portfolio}>
                 Portfolio
-              </a>
-              <a className="nav-link" href="/home#contacto">
+              </NavLink>
+              <NavLink className="nav-link" to={routes.public.promociones}>
+                Promociones
+              </NavLink>
+              <NavLink className="nav-link" to={routes.public.faq}>
+                FAQ
+              </NavLink>
+              <NavLink className="nav-link" to={routes.public.contacto}>
                 Contacto
-              </a>
+              </NavLink>
             </div>
-            <Link className="btn btn-outline-dark btn-sm" to={isAuthenticated ? panelPath : '/login'}>
+            <Link className="btn btn-outline-dark btn-sm" to={isAuthenticated ? panelPath : routes.auth.login}>
               {isAuthenticated ? 'Panel' : 'Login'}
             </Link>
           </div>

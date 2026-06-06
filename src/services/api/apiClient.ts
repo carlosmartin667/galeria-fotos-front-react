@@ -1,13 +1,12 @@
 import axios from 'axios';
+import { getApiUrl } from '@/config/env';
 import { normalizeApiError } from './apiError';
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5200/api';
 
 let authTokenProvider: (() => string | null) | null = null;
 let unauthorizedHandler: (() => void) | null = null;
 
 export const apiClient = axios.create({
-  baseURL: API_URL,
+  baseURL: getApiUrl(),
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

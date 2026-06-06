@@ -1,16 +1,51 @@
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '@/app/providers/AuthProvider';
+import { routes } from '@/config/routes';
+import { useBootstrapBundle } from '@/shared/hooks/useBootstrapBundle';
 
 const navGroups = [
   {
     label: 'Principal',
-    links: [{ to: '/admin/dashboard', label: 'Dashboard' }],
+    links: [
+      { to: routes.admin.dashboard, label: 'Dashboard' },
+      { to: '/admin/operaciones', label: 'Operaciones' },
+      { to: '/admin/eventos', label: 'Eventos' },
+      { to: '/admin/fotos', label: 'Fotos' },
+      { to: '/admin/clientes', label: 'Clientes' },
+      { to: '/admin/pedidos', label: 'Pedidos' },
+      { to: '/admin/ventas', label: 'Ventas' },
+      { to: '/admin/reportes/ventas', label: 'Reportes' },
+    ],
+  },
+  {
+    label: 'Gestion',
+    links: [
+      { to: '/admin/descargas', label: 'Descargas' },
+      { to: '/admin/presupuestos', label: 'Presupuestos' },
+      { to: '/admin/agenda', label: 'Agenda' },
+      { to: '/admin/sesiones-privadas', label: 'Sesiones privadas' },
+      { to: '/admin/cupones', label: 'Cupones' },
+      { to: '/admin/carritos-abandonados', label: 'Carritos abandonados' },
+    ],
+  },
+  {
+    label: 'Sitio',
+    links: [
+      { to: '/admin/portfolio', label: 'Portfolio' },
+      { to: '/admin/servicios', label: 'Servicios' },
+      { to: '/admin/faq', label: 'FAQ' },
+      { to: '/admin/promociones', label: 'Promociones' },
+      { to: '/admin/testimonios', label: 'Testimonios' },
+    ],
   },
   {
     label: 'Sistema',
     links: [
-      { to: '/admin/bitacora', label: 'Bitacora' },
-      { to: '/admin/dev-tools', label: 'DevTools' },
+      { to: '/admin/notificaciones', label: 'Notificaciones' },
+      { to: '/admin/notificaciones/plantillas', label: 'Plantillas' },
+      { to: '/admin/pexels/importar-fotos', label: 'Pexels' },
+      { to: routes.admin.bitacora, label: 'Bitacora' },
+      { to: routes.admin.devTools, label: 'DevTools' },
     ],
   },
 ];
@@ -18,7 +53,7 @@ const navGroups = [
 function SidebarContent() {
   return (
     <div className="p-3 h-100">
-      <Link className="d-block h5 text-white mb-4" to="/admin/dashboard">
+      <Link className="d-block h5 text-white mb-4" to={routes.admin.dashboard}>
         GaleriaFotos
       </Link>
       {navGroups.map((group) => (
@@ -38,6 +73,7 @@ function SidebarContent() {
 }
 
 export function AdminLayout() {
+  useBootstrapBundle();
   const { logout, session } = useAuth();
 
   return (

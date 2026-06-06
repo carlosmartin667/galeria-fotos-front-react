@@ -1,13 +1,16 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { hasAnyRole as userHasAnyRole, isAdminRole } from '@/config/roles';
 import { configureApiAuth } from '@/services/api/apiClient';
 import { authService } from '@/services/auth/authService';
 import type { AuthSession, LoginCredentials, UserRole } from '@/types/auth';
+import type { RegisterPayload } from '@/types/auth';
 
 interface AuthContextValue {
   session: AuthSession | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
   login: (credentials: LoginCredentials) => Promise<AuthSession>;
+  register: (payload: RegisterPayload) => Promise<AuthSession | null>;
   logout: () => void;
   hasAnyRole: (roles: UserRole[]) => boolean;
 }
@@ -15,7 +18,7 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 function hasAdminRole(session: AuthSession | null) {
-  return Boolean(session?.user.roles.some((role) => role.toLowerCase() === 'admin'));
+  return Boolean(session?.user.roles.some(isAdminRole));
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -40,13 +43,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return nextSession;
   }, []);
 
+  const register = useCallback(async (payload: RegisterPayload) => {
+    const nextSession = await authService.register(payload);
+    if (nextSession) {
+      authService.saveSession(nextSession);
+      setSession(nextSession);
+    }
+    return nextSession;
+  }, []);
+
   const hasAnyRole = useCallback(
-    (roles: UserRole[]) =>
-      Boolean(
-        session?.user.roles.some((userRole) =>
-          roles.some((role) => role.toLowerCase() === userRole.toLowerCase()),
-        ),
-      ),
+    (roles: UserRole[]) => userHasAnyRole(session?.user.roles, roles),
     [session],
   );
 
@@ -56,10 +63,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isAuthenticated: Boolean(session),
       isAdmin: hasAdminRole(session),
       login,
+      register,
       logout,
       hasAnyRole,
     }),
-    [hasAnyRole, login, logout, session],
+    [hasAnyRole, login, logout, register, session],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

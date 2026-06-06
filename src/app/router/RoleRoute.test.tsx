@@ -22,12 +22,33 @@ describe('RoleRoute', () => {
             <Route element={<RoleRoute roles={['Admin']} />}>
               <Route path="/admin/dashboard" element={<div>Admin</div>} />
             </Route>
-            <Route path="/dashboard" element={<div>Dashboard usuario</div>} />
+            <Route path="/access-denied" element={<div>Acceso denegado</div>} />
           </Routes>
         </MemoryRouter>
       </AuthProvider>,
     );
 
-    expect(screen.getByText('Dashboard usuario')).toBeInTheDocument();
+    expect(screen.getByText('Acceso denegado')).toBeInTheDocument();
+  });
+
+  it('permite admin en rutas admin', () => {
+    vi.spyOn(authService, 'getSession').mockReturnValue({
+      token: 'token',
+      user: { email: 'admin@test.com', roles: ['Admin'] },
+    });
+
+    render(
+      <AuthProvider>
+        <MemoryRouter initialEntries={['/admin/dashboard']}>
+          <Routes>
+            <Route element={<RoleRoute roles={['Admin']} />}>
+              <Route path="/admin/dashboard" element={<div>Admin</div>} />
+            </Route>
+          </Routes>
+        </MemoryRouter>
+      </AuthProvider>,
+    );
+
+    expect(screen.getByText('Admin')).toBeInTheDocument();
   });
 });

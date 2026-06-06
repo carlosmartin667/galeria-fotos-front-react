@@ -1,22 +1,30 @@
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '@/app/providers/AuthProvider';
+import { routes } from '@/config/routes';
+import { useBootstrapBundle } from '@/shared/hooks/useBootstrapBundle';
 
 const userLinks = [
-  { to: '/dashboard', label: 'Dashboard' },
-  { to: '/dashboard#eventos', label: 'Eventos' },
-  { to: '/dashboard#carrito', label: 'Carrito' },
-  { to: '/dashboard#pedidos', label: 'Pedidos' },
-  { to: '/dashboard#descargas', label: 'Descargas' },
+  { to: routes.user.dashboard, label: 'Dashboard' },
+  { to: routes.user.eventos, label: 'Eventos' },
+  { to: routes.user.fotos, label: 'Fotos' },
+  { to: routes.user.favoritos, label: 'Favoritos' },
+  { to: routes.user.carrito, label: 'Carrito' },
+  { to: routes.user.pedidos, label: 'Mis pedidos' },
+  { to: routes.user.descargas, label: 'Mis descargas' },
+  { to: routes.user.historial, label: 'Mi historial' },
+  { to: routes.user.notificaciones, label: 'Notificaciones' },
+  { to: routes.user.profile, label: 'Mi perfil' },
 ];
 
 export function UserLayout() {
+  useBootstrapBundle();
   const { logout, session, isAdmin } = useAuth();
 
   return (
     <div className="app-shell">
       <nav className="navbar navbar-expand-lg bg-white border-bottom">
         <div className="container-fluid px-4">
-          <Link className="navbar-brand fw-semibold" to="/dashboard">
+          <Link className="navbar-brand fw-semibold" to={routes.user.dashboard}>
             GaleriaFotos
           </Link>
           <button
@@ -38,7 +46,7 @@ export function UserLayout() {
                 </NavLink>
               ))}
               {isAdmin ? (
-                <NavLink className="nav-link" to="/admin/dashboard">
+                <NavLink className="nav-link" to={routes.admin.dashboard}>
                   Admin
                 </NavLink>
               ) : null}

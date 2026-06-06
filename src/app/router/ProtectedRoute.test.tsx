@@ -1,9 +1,14 @@
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AuthProvider } from '@/app/providers/AuthProvider';
 import { authService } from '@/services/auth/authService';
 import { ProtectedRoute } from './ProtectedRoute';
+
+function LoginProbe() {
+  const location = useLocation();
+  return <div>Login {location.search}</div>;
+}
 
 describe('ProtectedRoute', () => {
   beforeEach(() => {
@@ -19,12 +24,12 @@ describe('ProtectedRoute', () => {
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<div>Privado</div>} />
             </Route>
-            <Route path="/login" element={<div>Login</div>} />
+            <Route path="/login" element={<LoginProbe />} />
           </Routes>
         </MemoryRouter>
       </AuthProvider>,
     );
 
-    expect(screen.getByText('Login')).toBeInTheDocument();
+    expect(screen.getByText('Login ?returnUrl=%2Fdashboard')).toBeInTheDocument();
   });
 });

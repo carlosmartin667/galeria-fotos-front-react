@@ -13,6 +13,11 @@ a {
   text-decoration: none;
 }
 
+:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
 .app-shell {
   min-height: 100vh;
 }
