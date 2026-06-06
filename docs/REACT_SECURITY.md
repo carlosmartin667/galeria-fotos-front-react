@@ -59,3 +59,19 @@ Las rutas admin siguen protegidas por `ProtectedRoute` + `RoleRoute(Admin)`. Las
 ## Revisión final R6
 
 Se revisaron referencias a `storageKey`, `marcaAguaStorageKey`, `signedUrl`, tokens, secretos, passwords, `console.log`, `console.error`, `JSON.stringify` y `dangerouslySetInnerHTML`. No se renderiza HTML crudo de plantillas/notificaciones y Bitacora/DevTools usan metadata sanitizada. Los links de descarga pueden apuntar a una URL firmada devuelta por backend, pero la URL completa no se imprime en pantalla ni se guarda localmente.
+
+## Alineacion OpenAPI R6.5A
+
+La correccion R6.5A refuerza seguridad por contrato: React no consume endpoints no publicados para fotos o reportes, y MSW tampoco los simula. Esto reduce el riesgo de que una pantalla parezca funcionar en tests pero falle contra backend real o exponga datos que el backend nunca pensaba entregar.
+
+Fotos admin y cliente se consultan por evento o por id. Las operaciones de storage key y metadata usan los endpoints reales, pero las claves de storage no se renderizan en pantalla ni se registran. DevTools conserva sanitizacion para payloads sensibles y respeta los metodos HTTP del OpenAPI, incluyendo el `POST` de auditoria.
+
+## Alineacion OpenAPI R6.5B
+
+Notas internas solo se montan en rutas Admin. No aparecen en rutas Usuario/Cliente ni en historial cliente. Su contenido pasa por sanitizacion de texto antes de renderizar.
+
+Checkout Pro no guarda URLs de pago en storage ni las imprime en pantalla. La UI crea la preferencia y muestra un boton de continuacion si el backend devuelve una URL `http/https` valida. El webhook de Mercado Pago se considera backend-only.
+
+Sesiones privadas y fotos privadas quedan en Admin. La UI no muestra claves privadas, URLs firmadas completas ni metadata sensible. Descargas de usuario abren enlaces privados mediante accion de boton, sin renderizar el enlace firmado como texto o `href`.
+
+Comentarios y paquetes usan DTOs minimos del OpenAPI. Los comentarios vacios se bloquean con Zod. Precios y totales se muestran desde backend; el frontend no calcula descuentos finales.

@@ -68,3 +68,13 @@ La UI no imprime tokens, passwords, storage keys, `MarcaAguaStorageKey`, URLs fi
 6. Login Admin.
 7. Reportes, Bitacora y DevTools.
 8. Tests, CI y audit.
+
+## Punto fuerte R6.5A
+
+La app no solo tiene pantallas y tests: tambien fue contrastada contra el OpenAPI real. Se eliminaron endpoints inventados como `GET /Fotos` y reportes sin `/resumen`, se corrigieron metodos HTTP de acciones admin y se amplio DevTools a los 21 endpoints publicados. Es un buen punto para entrevista porque muestra criterio de arquitectura: separar API clients por dominio, proteger contratos con tests y no dejar que MSW o la UI oculten diferencias con el backend real.
+
+## Punto fuerte R6.5B
+
+R6.5B muestra madurez de producto: notas internas solo Admin, comentarios moderables, paquetes de evento, checkout seguro, sesiones privadas, paginados reales y perfil publico/admin. Lo importante para explicar es que React no inventa backend: cada flujo nace de OpenAPI, los services encapsulan contratos, MSW reproduce rutas reales y los tests prueban tanto UX como seguridad visual.
+
+Tradeoffs defendibles: el webhook de Mercado Pago queda backend-only; React no calcula descuentos finales; fotos privadas y notas internas no se muestran fuera de Admin; React Compiler, SSR, PWA y Zustand siguen fuera porque no resuelven un problema actual.

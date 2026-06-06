@@ -112,3 +112,28 @@ R6 cierra la base para demo y entrevista:
 - Accesibilidad mejorada en foco visible, formularios criticos y tablas Admin.
 - CI ejecuta `npm ci`, `npm run typecheck`, `npm run build`, `npm test` y `npm audit --audit-level=high`.
 - Cobertura final: 70 tests con Vitest, Testing Library y MSW.
+
+## Alineacion OpenAPI R6.5A
+
+R6.5A elimina endpoints inventados en React y MSW para las areas criticas revisadas:
+
+- Fotos ya no usa `GET /Fotos`; lista por `GET /Fotos/evento/{eventoId}` y detalle por `GET /Fotos/{id}`.
+- Reportes de ventas usa `GET /Reportes/ventas/resumen` con `desde` y `hasta`.
+- Bitacora y Agenda envian filtros con los nombres definidos por OpenAPI.
+- DevTools expone los 21 endpoints reales y usa `POST` donde corresponde.
+- MSW queda alineado al contrato real para prevenir regresiones en tests.
+
+## Alineacion OpenAPI R6.5B
+
+R6.5B completa endpoints funcionales restantes del OpenAPI real sin tocar backend ni Angular:
+
+- Notas internas admin por entidad con crear, editar y eliminar.
+- Checkout Pro desde pedido/carrito usando `POST /Pagos/checkout-pro/preferencias`.
+- Sesiones privadas admin, cambio de estado y fotos privadas.
+- Comentarios de eventos/fotos con validacion.
+- Paquetes de evento y agregado al carrito por paquete.
+- Paginados reales con `Page`, `PageSize` y `All`.
+- Perfil publico/admin desde `Admin` y `Sitio`.
+- MSW y tests R6.5B para contratos, errores controlados y seguridad visual.
+
+El webhook `POST /Pagos/webhooks/mercado-pago` queda documentado como backend-only.

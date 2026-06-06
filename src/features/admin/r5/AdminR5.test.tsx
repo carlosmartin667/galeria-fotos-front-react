@@ -48,7 +48,7 @@ describe('admin R5', () => {
   });
 
   it('lista fotos admin sin exponer storageKey ni URL firmada', async () => {
-    renderAdminAt('/admin/fotos');
+    renderAdminAt('/admin/fotos/evento/ev-1');
 
     expect(await screen.findByText('Foto principal')).toBeInTheDocument();
     expect(screen.queryByText(/private-key/i)).not.toBeInTheDocument();

@@ -4,6 +4,7 @@ const KEY_PATTERNS = [
   /("?(?:token|password|apiKey|apikey|bearer|storageKey|marcaAguaStorageKey|signedUrl)"?\s*[:=]\s*)("[^"]*"|'[^']*'|[^\s,;}\]]+)/gi,
   /((?:token|password|apiKey|apikey|bearer|StorageKey|MarcaAguaStorageKey|signedUrl)=)([^&\s]+)/gi,
   /(Bearer\s+)[A-Za-z0-9._~+/=-]+/gi,
+  /()\b(?:sk-[A-Za-z0-9_-]+|secret-[A-Za-z0-9._~+/=-]+|token-[A-Za-z0-9._~+/=-]+|jwt-[A-Za-z0-9._~+/=-]+)\b/gi,
 ];
 
 const SENSITIVE_QUERY_KEYS = [

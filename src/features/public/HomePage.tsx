@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { routes } from '@/config/routes';
 import { queryKeys } from '@/services/api/queryKeys';
-import { getSitioHome } from '@/services/sitio/sitioApi';
+import { getPerfilFotografaPublico, getSitioHome } from '@/services/sitio/sitioApi';
 import { EmptyState } from '@/shared/components/EmptyState';
 import { ErrorState } from '@/shared/components/ErrorState';
 import { LoadingState } from '@/shared/components/LoadingState';
@@ -11,11 +11,13 @@ import { PublicCard } from './components/PublicCards';
 
 export function HomePage() {
   const home = useQuery({ queryKey: queryKeys.sitio.home(), queryFn: getSitioHome });
+  const perfil = useQuery({ queryKey: queryKeys.sitio.perfilFotografa(), queryFn: getPerfilFotografaPublico });
 
   if (home.isLoading) return <LoadingState />;
   if (home.isError) return <main className="container py-5"><ErrorState /></main>;
 
   const data = home.data ?? {};
+  const perfilPublico = perfil.data ?? {};
 
   return (
     <>
@@ -23,8 +25,8 @@ export function HomePage() {
       <section className="gf-public-hero">
         <div className="container">
           <div className="col-12 col-lg-7">
-            <h1 className="display-5 fw-semibold">{data.titulo || 'GaleriaFotos'}</h1>
-            <p className="lead">{data.subtitulo || data.descripcion || 'Fotografia de eventos con entrega digital segura.'}</p>
+            <h1 className="display-5 fw-semibold">{data.titulo || perfilPublico.nombre || 'GaleriaFotos'}</h1>
+            <p className="lead">{data.subtitulo || perfilPublico.textoBienvenida || data.descripcion || perfilPublico.descripcion || 'Fotografia de eventos con entrega digital segura.'}</p>
             <div className="d-flex gap-2 flex-wrap">
               <Link className="btn btn-light" to={routes.public.presupuesto}>Solicitar presupuesto</Link>
               <Link className="btn btn-outline-light" to={routes.public.portfolio}>Ver portfolio</Link>

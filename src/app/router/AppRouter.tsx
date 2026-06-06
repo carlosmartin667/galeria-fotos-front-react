@@ -61,8 +61,17 @@ const AdminSummaryPage = lazy(() =>
 const AdminEventFormPage = lazy(() =>
   import('@/features/admin/r5/AdminEventFormPage').then((module) => ({ default: module.AdminEventFormPage })),
 );
+const AdminEventoDetailPage = lazy(() =>
+  import('@/features/admin/r5/AdminEventoDetailPage').then((module) => ({ default: module.AdminEventoDetailPage })),
+);
 const AdminFotosToolsPage = lazy(() =>
   import('@/features/admin/r5/AdminFotosToolsPage').then((module) => ({ default: module.AdminFotosToolsPage })),
+);
+const AdminFotosEventoPage = lazy(() =>
+  import('@/features/admin/r5/AdminFotosEventoPage').then((module) => ({ default: module.AdminFotosEventoPage })),
+);
+const AdminFotoDetailPage = lazy(() =>
+  import('@/features/admin/r5/AdminFotoDetailPage').then((module) => ({ default: module.AdminFotoDetailPage })),
 );
 const AdminClienteHistorialPage = lazy(() =>
   import('@/features/admin/r5/AdminClienteHistorialPage').then((module) => ({ default: module.AdminClienteHistorialPage })),
@@ -82,8 +91,20 @@ const AdminNotificacionDetailPage = lazy(() =>
 const AdminAgendaPage = lazy(() =>
   import('@/features/admin/r5/AdminAgendaPage').then((module) => ({ default: module.AdminAgendaPage })),
 );
+const AdminSesionesPrivadasPage = lazy(() =>
+  import('@/features/admin/r5/AdminSesionesPrivadasPage').then((module) => ({ default: module.AdminSesionesPrivadasPage })),
+);
+const AdminSesionPrivadaDetailPage = lazy(() =>
+  import('@/features/admin/r5/AdminSesionPrivadaDetailPage').then((module) => ({ default: module.AdminSesionPrivadaDetailPage })),
+);
 const AdminCuponesPage = lazy(() =>
   import('@/features/admin/r5/AdminCuponesPage').then((module) => ({ default: module.AdminCuponesPage })),
+);
+const AdminReportesVentasPage = lazy(() =>
+  import('@/features/admin/r5/AdminReportesVentasPage').then((module) => ({ default: module.AdminReportesVentasPage })),
+);
+const AdminMiPerfilPage = lazy(() =>
+  import('@/features/admin/r5/AdminMiPerfilPage').then((module) => ({ default: module.AdminMiPerfilPage })),
 );
 
 export function AppRouter() {
@@ -137,14 +158,14 @@ export function AppRouter() {
                   <Route path="eventos" element={<AdminGenericListPage configKey="eventos" />} />
                   <Route path="eventos/nuevo" element={<AdminEventFormPage />} />
                   <Route path="eventos/editar/:id" element={<AdminEventFormPage />} />
-                  <Route path="eventos/:id" element={<AdminGenericListPage configKey="eventos" />} />
-                  <Route path="fotos" element={<AdminGenericListPage configKey="fotos" />} />
-                  <Route path="fotos/evento" element={<AdminGenericListPage configKey="fotos" />} />
-                  <Route path="fotos/evento/:eventoId" element={<AdminGenericListPage configKey="fotos" />} />
+                  <Route path="eventos/:id" element={<AdminEventoDetailPage />} />
+                  <Route path="fotos" element={<AdminFotosEventoPage />} />
+                  <Route path="fotos/evento" element={<AdminFotosEventoPage />} />
+                  <Route path="fotos/evento/:eventoId" element={<AdminFotosEventoPage />} />
                   <Route path="fotos/bulk" element={<AdminFotosToolsPage mode="bulk" />} />
                   <Route path="fotos/metadata" element={<AdminFotosToolsPage mode="metadata" />} />
                   <Route path="fotos/editar/:id" element={<AdminFotosToolsPage mode="metadata" />} />
-                  <Route path="fotos/:id" element={<AdminGenericListPage configKey="fotos" />} />
+                  <Route path="fotos/:id" element={<AdminFotoDetailPage />} />
                   <Route path="clientes" element={<AdminGenericListPage configKey="clientes" />} />
                   <Route path="clientes/nuevo" element={<AdminGenericListPage configKey="clientes" />} />
                   <Route path="clientes/editar/:id" element={<AdminGenericListPage configKey="clientes" />} />
@@ -156,7 +177,8 @@ export function AppRouter() {
                   <Route path="presupuestos" element={<AdminGenericListPage configKey="presupuestos" />} />
                   <Route path="presupuestos/:id" element={<AdminPresupuestoDetailPage />} />
                   <Route path="agenda" element={<AdminAgendaPage />} />
-                  <Route path="sesiones-privadas" element={<AdminGenericListPage configKey="sesiones" />} />
+                  <Route path="sesiones-privadas" element={<AdminSesionesPrivadasPage />} />
+                  <Route path="sesiones-privadas/:id" element={<AdminSesionPrivadaDetailPage />} />
                   <Route path="portfolio" element={<AdminGenericListPage configKey="portfolio" />} />
                   <Route path="servicios" element={<AdminGenericListPage configKey="servicios" />} />
                   <Route path="faq" element={<AdminGenericListPage configKey="faq" />} />
@@ -168,8 +190,9 @@ export function AppRouter() {
                   <Route path="promociones" element={<AdminGenericListPage configKey="promociones" />} />
                   <Route path="testimonios" element={<AdminGenericListPage configKey="testimonios" />} />
                   <Route path="carritos-abandonados" element={<AdminGenericListPage configKey="carritos" />} />
-                  <Route path="reportes/ventas" element={<AdminSummaryPage configKey="reportesVentas" />} />
+                  <Route path="reportes/ventas" element={<AdminReportesVentasPage />} />
                   <Route path="pexels/importar-fotos" element={<AdminFotosToolsPage mode="pexels" />} />
+                  <Route path="mi-perfil" element={<AdminMiPerfilPage />} />
                   <Route path="bitacora" element={<AdminBitacoraPage />} />
                   <Route path="dev-tools" element={<AdminDevToolsPage />} />
                 </Route>

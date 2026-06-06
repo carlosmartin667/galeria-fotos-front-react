@@ -25,10 +25,17 @@ describe('user pages', () => {
   });
 
   it('lista fotos, no muestra StorageKey y permite favorito', async () => {
-    renderAt(routes.user.fotos);
+    renderAt(`${routes.user.fotos}?eventoId=ev-1`);
     expect(await screen.findByText('Foto principal')).toBeInTheDocument();
     expect(screen.queryByText(/private-key/)).not.toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Favorito' }));
+  });
+
+  it('fotos sin eventoId muestra estado seguro', async () => {
+    renderAt(routes.user.fotos);
+
+    expect(await screen.findByText('Selecciona un evento')).toBeInTheDocument();
+    expect(screen.queryByText('Foto principal')).not.toBeInTheDocument();
   });
 
   it('carrito muestra totales, cupon y crear pedido', async () => {
@@ -51,7 +58,7 @@ describe('user pages', () => {
 
   it('descargas no muestra URL firmada completa', async () => {
     renderAt(routes.user.descargaDetail('des-1'));
-    expect(await screen.findByRole('link', { name: 'Abrir descarga' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'Abrir descarga' })).toBeInTheDocument();
     expect(screen.queryByText(/sig=secret/)).not.toBeInTheDocument();
   });
 

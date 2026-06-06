@@ -110,3 +110,24 @@ R5 mantiene React Router en modo declarativo y agrupa las pantallas administrati
 ## Calidad R6
 
 No se agrega SSR, React Compiler, Zustand ni PWA. La estrategia sigue siendo SPA con Vite y TanStack Query. Las optimizaciones aplicadas son reversibles y de bajo riesgo: lazy loading por pagina/grupo, carga diferida de Bootstrap JS y separacion de configuracion Admin fuera del chunk raiz.
+
+## Alineacion OpenAPI R6.5A
+
+R6.5A toma el OpenAPI del backend como fuente de verdad para los modulos criticos revisados. React no lista fotos con un endpoint raiz inexistente; las pantallas cliente y admin consultan fotos por evento y el detalle por id. Reportes de ventas usa el endpoint de resumen real. Bitacora y Agenda conservan los nombres de filtros publicados por OpenAPI, incluyendo mayusculas iniciales cuando el backend las espera.
+
+Los API clients siguen separados por dominio y encapsulan el contrato HTTP. Las pantallas consumen funciones tipadas y query keys estables, por lo que un cambio futuro de paginado o filtros queda localizado en `services` y `queryKeys`.
+
+MSW no se usa para inventar capacidades del backend. Los handlers de tests reproducen las rutas reales de fotos, reportes, cupones, promociones, testimonios y DevTools para detectar regresiones temprano.
+
+## Alineacion OpenAPI R6.5B
+
+R6.5B agrega servicios y UI para endpoints funcionales que quedaban pendientes: notas internas, checkout, sesiones privadas, fotos privadas, comentarios, paquetes de evento, paginados y perfil fotografa. La estructura sigue siendo SPA con API clients por dominio:
+
+- `services/admin/notasInternasApi.ts` para notas internas por entidad.
+- `services/comentarios/comentariosApi.ts` para comentarios de eventos/fotos.
+- `services/pagos/pagosApi.ts` para crear preferencias Checkout Pro.
+- `services/admin/sesionesPrivadasAdminApi.ts` para sesiones privadas y fotos privadas.
+- `services/eventos`, `services/fotos`, `services/favoritos` y `services/pedidos` para paginados reales.
+- `services/sitio` y `services/admin/adminPerfilApi.ts` para perfil publico/admin.
+
+Los paneles reutilizables viven en `shared/components`: `ComentariosPanel`, `PagoCheckoutButton`, `PaginationControls`, `NotasInternasPanel` y `PaquetesEventoPanel`.

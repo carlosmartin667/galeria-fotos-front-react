@@ -89,3 +89,28 @@ Rutas privadas cliente:
 - `/perfil`
 
 Estas rutas requieren sesion. La gestion administrativa sigue reservada para `/admin/...`.
+
+## Alineacion OpenAPI R6.5A
+
+Para la demo con backend real:
+
+- Desde el detalle de evento cliente, usar "Ver todas las fotos" para abrir `/fotos?eventoId=...`.
+- En Admin, `/admin/fotos` pide el identificador de evento y consulta `/Fotos/evento/{eventoId}`.
+- `/admin/reportes/ventas` consulta `/Reportes/ventas/resumen` y permite filtrar por `desde` y `hasta`.
+- `/admin/bitacora` y `/admin/agenda` mantienen filtros compatibles con OpenAPI.
+- `/admin/dev-tools` muestra los 21 endpoints reales de diagnostico y sanea payloads sensibles.
+
+## Alineacion OpenAPI R6.5B
+
+Flujo sugerido adicional:
+
+1. Abrir `/eventos` y mostrar paginacion real.
+2. Abrir un evento, revisar paquetes, agregar un paquete al carrito y crear un comentario.
+3. Abrir una foto y crear un comentario.
+4. Abrir un pedido y preparar Checkout Pro; la URL de pago no se imprime.
+5. Ingresar como Admin y abrir `/admin/eventos/:id` para paquetes, comentarios moderables y notas internas.
+6. Abrir `/admin/sesiones-privadas` y `/admin/sesiones-privadas/:id` para cambio de estado y fotos privadas.
+7. Abrir `/admin/mi-perfil` para validar formulario de perfil admin.
+8. Confirmar que notas internas no aparecen en `/mi-historial`.
+
+`POST /Pagos/webhooks/mercado-pago` no se demuestra desde React porque pertenece al backend.

@@ -1,2 +1,21 @@
-import { Link, useParams } from 'react-router-dom'; import { useQuery } from '@tanstack/react-query'; import { routes } from '@/config/routes'; import { queryKeys } from '@/services/api/queryKeys'; import { getEvento } from '@/services/eventos/eventosApi'; import { getFotosEvento } from '@/services/fotos/fotosApi'; import { LoadingState } from '@/shared/components/LoadingState'; import { EmptyState } from '@/shared/components/EmptyState'; import { Seo } from '@/shared/components/Seo'; import { UserCard } from './components/UserList';
-export function EventoDetailPage(){ const {id=''}=useParams(); const evento=useQuery({queryKey:queryKeys.eventos.detail(id),queryFn:()=>getEvento(id)}); const fotos=useQuery({queryKey:['fotos','evento',id],queryFn:()=>getFotosEvento(id),enabled:Boolean(id)}); if(evento.isLoading)return <LoadingState/>; if(!evento.data)return <EmptyState title="Evento no encontrado"/>; return <section><Seo title={evento.data.nombre} description="Detalle de evento"/><Link to={routes.user.eventos}>Volver</Link><h1 className="h3">{evento.data.nombre}</h1><p className="text-secondary">{evento.data.descripcion}</p><h2 className="h5">Fotos</h2><div className="row g-3">{(fotos.data??[]).map(f=><div className="col-md-3" key={f.id}><UserCard title={f.titulo||f.nombreArchivo||'Foto'} to={routes.user.fotoDetail(f.id)}/></div>)}</div></section>}
+import { Link, useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { routes } from '@/config/routes';
+import { queryKeys } from '@/services/api/queryKeys';
+import { getEvento } from '@/services/eventos/eventosApi';
+import { getFotosEvento } from '@/services/fotos/fotosApi';
+import { LoadingState } from '@/shared/components/LoadingState';
+import { EmptyState } from '@/shared/components/EmptyState';
+import { Seo } from '@/shared/components/Seo';
+import { ComentariosPanel } from '@/shared/components/ComentariosPanel';
+import { PaquetesEventoPanel } from '@/shared/components/eventos/PaquetesEventoPanel';
+import { UserCard } from './components/UserList';
+
+export function EventoDetailPage() {
+  const { id = '' } = useParams();
+  const evento = useQuery({ queryKey: queryKeys.eventos.detail(id), queryFn: () => getEvento(id) });
+  const fotos = useQuery({ queryKey: queryKeys.fotos.byEvento(id), queryFn: () => getFotosEvento(id), enabled: Boolean(id) });
+  if (evento.isLoading) return <LoadingState />;
+  if (!evento.data) return <EmptyState title="Evento no encontrado" />;
+  return <section><Seo title={evento.data.nombre} description="Detalle de evento" /><Link to={routes.user.eventos}>Volver</Link><h1 className="h3">{evento.data.nombre}</h1><p className="text-secondary">{evento.data.descripcion}</p><Link className="btn btn-outline-dark btn-sm mb-3" to={`${routes.user.fotos}?eventoId=${encodeURIComponent(id)}`}>Ver todas las fotos</Link><PaquetesEventoPanel eventoId={id} /><h2 className="h5 mt-4">Fotos</h2><div className="row g-3">{(fotos.data ?? []).map((f) => <div className="col-md-3" key={f.id}><UserCard title={f.titulo || f.nombreArchivo || 'Foto'} to={routes.user.fotoDetail(f.id)} /></div>)}</div><ComentariosPanel targetType="evento" targetId={id} /></section>;
+}

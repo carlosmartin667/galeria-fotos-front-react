@@ -65,3 +65,27 @@ R5 agrega tests de acceso por rol, navegacion admin, fotos sin storage keys, for
 ## Calidad final R6
 
 R6 eleva la suite a 70 tests. Agrega cobertura para rutas publicas sin sesion, bloqueo cliente en Admin, acceso Admin, sanitizacion de Bitacora, sanitizacion de DevTools y navegacion Admin final. El CI corre typecheck antes de build para detectar contratos rotos temprano.
+
+## Alineacion OpenAPI R6.5A
+
+R6.5A agrega tests de contrato para los puntos que habian quedado desalineados:
+
+- Fotos cliente y admin usan `GET /Fotos/evento/{eventoId}` y no `GET /Fotos`.
+- Fotos admin usa endpoints reales para storage key, metadata, bulk y `PUT /Fotos/{id}`.
+- Reportes de ventas usa `GET /Reportes/ventas/resumen` con `desde` y `hasta`.
+- Bitacora y Agenda envian filtros con nombres OpenAPI.
+- DevTools expone 21 endpoints y ejecuta `POST /dev-tools/audit/test-entry`.
+- MSW no conserva handlers inventados principales para fotos o reportes.
+
+## Alineacion OpenAPI R6.5B
+
+R6.5B eleva la suite a 86 tests. La cobertura nueva valida:
+
+- Notas internas admin, creacion, edicion, eliminacion y ausencia en rutas usuario.
+- Checkout Pro sin mostrar token ni URL de pago.
+- Comentarios de evento/foto y bloqueo de comentario vacio.
+- Paquetes de evento y agregado al carrito.
+- Paginados con `Page`, `PageSize` y `All`.
+- Sesiones privadas, cambio de estado y fotos privadas sin exponer datos sensibles.
+- Perfil publico/admin sin datos privados.
+- Handlers MSW exactos para los endpoints OpenAPI R6.5B.

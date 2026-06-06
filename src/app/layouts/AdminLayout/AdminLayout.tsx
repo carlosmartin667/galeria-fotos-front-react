@@ -43,6 +43,7 @@ const navGroups = [
     links: [
       { to: '/admin/notificaciones', label: 'Notificaciones' },
       { to: '/admin/notificaciones/plantillas', label: 'Plantillas' },
+      { to: '/admin/mi-perfil', label: 'Mi perfil' },
       { to: '/admin/pexels/importar-fotos', label: 'Pexels' },
       { to: routes.admin.bitacora, label: 'Bitacora' },
       { to: routes.admin.devTools, label: 'DevTools' },

@@ -1,6 +1,12 @@
-import type { Evento } from '@/types/evento'; import { adminGetList, adminGetOne, adminPost, adminPut } from './adminHttp';
+import type { Evento } from '@/types/evento';
+import type { ActualizarPaqueteEventoRequest, CrearPaqueteEventoRequest, PaqueteEvento } from '@/types/paqueteEvento';
+import { adminDelete, adminGetList, adminGetOne, adminPost, adminPut } from './adminHttp';
 export const getEventosAdmin = () => adminGetList<Evento>('/Eventos');
 export const getEventoAdmin = (id: string) => adminGetOne<Evento>(`/Eventos/${id}`);
 export const createEventoAdmin = (payload: Partial<Evento>) => adminPost('/Eventos', payload);
 export const updateEventoAdmin = (id: string, payload: Partial<Evento>) => adminPut(`/Eventos/${id}`, payload);
 export const setEventoPortada = (eventoId: string, fotoId: string) => adminPut(`/Eventos/${eventoId}/portada/${fotoId}`);
+export const getPaquetesEventoAdmin = (eventoId: string) => adminGetList<PaqueteEvento>(`/Eventos/${eventoId}/paquetes`);
+export const createPaqueteEventoAdmin = (eventoId: string, payload: CrearPaqueteEventoRequest) => adminPost(`/Eventos/${eventoId}/paquetes`, payload);
+export const updatePaqueteEventoAdmin = (paqueteId: string, payload: ActualizarPaqueteEventoRequest) => adminPut(`/Eventos/paquetes/${paqueteId}`, payload);
+export const deletePaqueteEventoAdmin = (paqueteId: string) => adminDelete(`/Eventos/paquetes/${paqueteId}`);

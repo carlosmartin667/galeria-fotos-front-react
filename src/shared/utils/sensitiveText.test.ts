@@ -26,4 +26,12 @@ describe('sensitiveText', () => {
       nested: { MarcaAguaStorageKey: '[redacted]', ok: 'visible' },
     });
   });
+
+  it('oculta secretos embebidos en texto libre', () => {
+    const result = sanitizeSensitiveText('nota privada secret-token y jwt-abc.def');
+
+    expect(result).not.toContain('secret-token');
+    expect(result).not.toContain('jwt-abc.def');
+    expect(result).toContain('[redacted]');
+  });
 });
